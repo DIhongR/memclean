@@ -21,3 +21,6 @@ $RECYCLE.BIN/
 .idea/
 .vscode/
 *.swp
+
+# Steamcommunity302 的自签 CA(仅本机 git 推送用, 不上传)
+_certs/
