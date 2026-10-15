@@ -1,0 +1,23 @@
+# 本地运行状态与日志，不要提交
+settings.json
+memclean.log
+
+# 开发期的诊断/验证脚本
+_dev/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# 系统
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# 编辑器
+.idea/
+.vscode/
+*.swp
