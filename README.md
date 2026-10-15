@@ -62,10 +62,38 @@
 | `memclean.py` | 主程序（托盘、图标、热键、清理逻辑全在这一个文件里） |
 | `启动内存清理工具.vbs` | 静默启动器，双击即可（自动寻找 pythonw.exe） |
 | `关闭内存清理工具.cmd` | 关闭正在运行的工具（只结束本程序的进程） |
-| `settings.json` | 配置（首次改动菜单项后自动生成） |
+| `git_push.ps1` | 本机提交到 GitHub 的辅助脚本 |
+| `settings.json` | 配置（首次改动菜单项后自动生成，已被 `.gitignore` 忽略） |
 | `icon_preview.png` | 托盘图标效果预览（由 `--icons` 生成） |
-| `memclean.log` | 调试日志，仅当设置了环境变量 `MEMCLEAN_DEBUG=1` 时才写 |
-| `_dev/` | 开发期的诊断/验证脚本，日常使用不需要 |
+| `memclean.log` | 调试日志，仅当设置了环境变量 `MEMCLEAN_DEBUG=1` 时才写（已被忽略） |
+| `_dev/` | 开发期的诊断/验证脚本，日常使用不需要（已被忽略） |
+| `_certs/` | 本机 git 推送用的自签 CA 证书（已被忽略，见下） |
+
+---
+
+## 三、在本机提交代码到 GitHub
+
+本机装的是 Git for Windows（`C:\Program Files\Git`）。由于 **Steamcommunity302** 会把
+`github.com` 劫持到 `127.0.0.1` 并用自签证书反代，直接 `git push` 会报证书错误，
+所以本仓库的 `.git/config` 里做了两处配置：
+
+```ini
+[http]
+    sslCAInfo = E:/dsh/gzq/memclean/_certs/s302_ca.crt   # 302 的自签 CA
+    sslVerifyHostname = false                            # 302 签发的证书 CN 是 steamcommunity.com
+```
+
+`_certs/s302_ca.crt` 已加入 `.gitignore`（证书不应公开，也不会上传到仓库）。
+这两处配置只对**本机**有效，换机器时不需要，删掉即可。
+
+以后提交只需：
+
+```powershell
+powershell -File E:\dsh\gzq\memclean\git_push.ps1 -Message "改了什么"
+```
+
+脚本会自动 `add -A` → `commit` → `push`。如果哪天证书报错，检查 302 是否在运行、
+以及 `_certs\s302_ca.crt` 是否还在。
 
 ---
 
